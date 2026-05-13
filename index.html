@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestion des Produits</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="hero-copy-block">
+        <p class="eyebrow"><span class="eyebrow-pill" data-i18n="eyebrow">Tableau intelligent</span></p>
+        <h1 data-i18n="title">Suivi moderne des produits et des frais</h1>
+        <p class="hero-copy" data-i18n="subtitle">
+          Ajoutez des lignes, collez des photos, suivez les frais et obtenez les totaux en temps reel.
+        </p>
+      </div>
+      <div class="toolbar">
+        <label class="language-switcher">
+          <span data-i18n="languageLabel">Langue</span>
+          <select id="languageSelect" aria-label="Language selector">
+            <option value="fr">Francais</option>
+            <option value="ar">العربية</option>
+            <option value="en">English</option>
+          </select>
+        </label>
+        <button id="addRowBtn" class="primary-btn" type="button" data-i18n="addRow">Ajouter une ligne</button>
+      </div>
+    </header>
+
+    <main class="content-card">
+      <section class="mobile-intro">
+        <div class="mobile-intro-badge" data-i18n="mobileHint">Version optimisee pour mobile et bureau</div>
+      </section>
+      <section class="export-panel">
+        <div class="export-panel-head">
+          <div>
+            <h2 class="section-title" data-i18n="exportTitle">Telechargement du contenu</h2>
+            <p class="section-copy" data-i18n="exportSubtitle">Exportez la page en plusieurs formats selon votre besoin.</p>
+            <p id="autosaveMeta" class="autosave-meta"></p>
+          </div>
+          <p id="exportStatus" class="export-status" aria-live="polite"></p>
+        </div>
+        <div class="export-actions">
+          <button type="button" class="secondary-btn export-btn" data-export="pdf" data-i18n="exportPdf">Exporter PDF</button>
+          <button type="button" class="secondary-btn export-btn" data-export="png" data-i18n="exportImage">Exporter image</button>
+          <button type="button" class="secondary-btn export-btn" data-export="html" data-i18n="exportPage">Exporter page</button>
+          <button type="button" class="secondary-btn export-btn" data-export="json" data-i18n="exportJson">Exporter JSON</button>
+          <button type="button" class="secondary-btn export-btn" data-export="csv" data-i18n="exportCsv">Exporter CSV</button>
+          <button type="button" id="clearSavedDataBtn" class="danger-btn" data-i18n="clearSavedData">Effacer les donnees sauvegardees</button>
+        </div>
+      </section>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="product">Produit</th>
+              <th data-i18n="referenceCode">Code de reference</th>
+              <th data-i18n="photo">Photo</th>
+              <th data-i18n="caption">Legende</th>
+              <th data-i18n="pickupFee">Frais de recuperation</th>
+              <th data-i18n="deliveryFee">Frais de livraison</th>
+              <th data-i18n="productPrice">Prix du produit</th>
+              <th data-i18n="netTotal">Total net</th>
+              <th data-i18n="notes">Notes / reclamations</th>
+              <th data-i18n="actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+
+      <section class="summary-panel">
+        <div class="summary-card products">
+          <span data-i18n="totalProducts">Total produits</span>
+          <strong id="totalProducts">0.00</strong>
+        </div>
+        <div class="summary-card fees">
+          <span data-i18n="totalFees">Total frais</span>
+          <strong id="totalFees">0.00</strong>
+        </div>
+        <div class="summary-card net">
+          <span data-i18n="remainingNet">Reste net</span>
+          <strong id="remainingNet">0.00</strong>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <button id="floatingAddBtn" class="floating-add-btn" type="button" aria-label="Add row">
+    <span class="floating-add-icon">+</span>
+    <span class="floating-add-text" data-i18n="addRow">Ajouter une ligne</span>
+  </button>
+
+  <template id="rowTemplate">
+    <tr>
+      <td>
+        <input type="text" class="text-input product-input" data-field="product" />
+      </td>
+      <td>
+        <input type="text" class="text-input" data-field="reference" />
+      </td>
+      <td>
+        <div class="photo-cell">
+          <label class="upload-box">
+            <input type="file" class="photo-input" accept="image/*" />
+            <span class="upload-text" data-i18n="uploadPhoto">Ajouter ou coller une photo</span>
+            <img class="photo-preview" alt="Preview" hidden />
+          </label>
+          <div class="photo-actions">
+            <label class="secondary-btn photo-camera-btn">
+              <input type="file" class="camera-input" accept="image/*" capture="environment" />
+              <span data-i18n="takePhoto">Prendre une photo</span>
+            </label>
+            <button type="button" class="secondary-btn paste-btn" data-i18n="pastePhoto">Coller</button>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="caption-cell">
+          <div class="phone-stack">
+            <article class="phone-mini-card">
+              <div class="phone-mini-head">
+                <span class="phone-mini-badge">☎</span>
+                <input type="text" class="phone-inline-input phone-number-title-input" data-field="captionDetail" />
+              </div>
+              <input type="text" class="phone-inline-input phone-name-input" data-field="clientName1" />
+              <input type="text" class="phone-inline-input phone-address-input" data-field="clientAddress1" />
+            </article>
+          </div>
+        </div>
+      </td>
+      <td>
+        <input type="number" class="number-input" data-field="pickupFee" min="0" step="0.01" value="0" />
+      </td>
+      <td>
+        <input type="number" class="number-input" data-field="deliveryFee" min="0" step="0.01" value="0" />
+      </td>
+      <td>
+        <input type="number" class="number-input" data-field="price" min="0" step="0.01" value="0" />
+      </td>
+      <td>
+        <output class="row-total">0.00</output>
+      </td>
+      <td>
+        <textarea class="notes-input" data-field="notes" rows="2"></textarea>
+      </td>
+      <td>
+        <button type="button" class="danger-btn delete-btn" data-i18n="delete">Supprimer</button>
+      </td>
+    </tr>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
