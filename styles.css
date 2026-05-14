@@ -2,6 +2,7 @@
   --bg-top: #fff3dd;
   --bg-mid: #e9f4ef;
   --bg-bottom: #d7e7ff;
+  --bg-deep: #f4f7fb;
   --card: rgba(255, 255, 255, 0.8);
   --card-strong: rgba(255, 255, 255, 0.92);
   --card-border: rgba(24, 34, 34, 0.08);
@@ -27,7 +28,7 @@
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+  font-family: "Segoe UI Variable", "Bahnschrift", "Segoe UI", Tahoma, Arial, sans-serif;
   color: var(--text);
   background:
     radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.92), transparent 28%),
@@ -240,6 +241,21 @@ button:hover {
   gap: 10px;
 }
 
+#saveDataBtn {
+  position: relative;
+  isolation: isolate;
+}
+
+#saveDataBtn::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  pointer-events: none;
+}
+
+
 .export-btn {
   min-width: 148px;
 }
@@ -309,6 +325,7 @@ button:hover {
   border-radius: 24px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0.22));
   border: 1px solid rgba(24, 34, 34, 0.06);
+  counter-reset: row-card;
 }
 
 table {
@@ -532,40 +549,57 @@ th {
 }
 
 @media (max-width: 900px) {
+  body {
+    background:
+      radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.96), transparent 34%),
+      radial-gradient(circle at 100% 0%, rgba(58, 120, 242, 0.12), transparent 30%),
+      linear-gradient(180deg, #fef2de 0%, #edf5f4 42%, var(--bg-deep) 100%);
+  }
+
   .page-shell {
     width: min(100%, calc(100% - 18px));
-    padding: 10px 0 160px;
+    padding: 10px 0 calc(176px + env(safe-area-inset-bottom, 0px));
   }
 
   .hero {
     flex-direction: column;
     align-items: stretch;
-    gap: 14px;
+    gap: 12px;
+    margin-bottom: 14px;
   }
 
   .toolbar {
     min-width: 0;
-    padding: 14px;
+    padding: 12px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(18px);
   }
 
   h1 {
-    font-size: clamp(1.8rem, 8vw, 2.8rem);
+    font-size: clamp(2rem, 8vw, 3rem);
+    line-height: 1.02;
   }
 
   .hero-copy {
     font-size: 0.95rem;
+    line-height: 1.52;
   }
 
   .content-card {
     padding: 12px;
-    border-radius: 26px;
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(18px);
   }
 
   .mobile-intro-badge {
     width: 100%;
     justify-content: center;
-    min-height: 42px;
+    min-height: 44px;
     text-align: center;
+    border: 1px solid rgba(40, 86, 197, 0.08);
+    background: linear-gradient(135deg, rgba(40, 86, 197, 0.11), rgba(255, 255, 255, 0.74));
   }
 
   .mobile-intro {
@@ -575,6 +609,9 @@ th {
   .export-panel {
     padding: 14px;
     border-radius: 22px;
+    background:
+      radial-gradient(circle at top right, rgba(11, 143, 120, 0.08), transparent 28%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.72));
   }
 
   .export-panel-head {
@@ -588,7 +625,18 @@ th {
   .export-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
+
+  #saveDataBtn {
+    grid-column: 1 / -1;
+    min-height: 60px;
+    padding: 15px 20px;
+    font-size: 1rem;
+    letter-spacing: 0.01em;
+    box-shadow: 0 18px 30px rgba(14, 143, 116, 0.24);
+  }
+
 
   .export-btn {
     width: 100%;
@@ -621,16 +669,19 @@ th {
 
   tbody {
     display: grid;
-    gap: 14px;
+    gap: 16px;
   }
 
   tr {
+    counter-increment: row-card;
     position: relative;
-    padding: 16px 14px 14px;
-    border-radius: 24px;
-    background: var(--card-strong);
-    border: 1px solid rgba(24, 34, 34, 0.08);
-    box-shadow: var(--shadow-soft);
+    padding: 18px 14px 14px;
+    border-radius: 26px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 251, 253, 0.96));
+    border: 1px solid rgba(24, 34, 34, 0.06);
+    box-shadow: 0 18px 38px rgba(16, 42, 39, 0.09);
+    overflow: hidden;
   }
 
   tr::after {
@@ -643,9 +694,29 @@ th {
       linear-gradient(180deg, rgba(255, 255, 255, 0.36), transparent 28%);
   }
 
+  tr::before {
+    content: counter(row-card, decimal-leading-zero);
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 42px;
+    height: 28px;
+    padding: 0 10px;
+    border-radius: 999px;
+    background: rgba(11, 143, 120, 0.1);
+    color: var(--accent-dark);
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+  }
+
   td {
     border-bottom: none;
-    padding: 8px 0;
+    padding: 10px 0;
   }
 
   td::before {
@@ -653,9 +724,10 @@ th {
     display: block;
     margin-bottom: 7px;
     color: var(--accent-dark);
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     font-weight: 800;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
 
   .photo-cell {
@@ -672,37 +744,44 @@ th {
   }
 
   .phone-stack {
-    min-height: 184px;
+    min-height: 172px;
   }
 
   .phone-mini-card {
     border-radius: 20px;
+    box-shadow: 0 14px 30px rgba(15, 66, 58, 0.07);
   }
 
   .upload-box {
     width: 100%;
     min-width: 0;
-    min-height: 184px;
+    min-height: 170px;
+    border-style: solid;
+    border-width: 1px;
   }
 
   .row-total {
     width: 100%;
-    min-height: 50px;
-    font-size: 1rem;
+    min-height: 54px;
+    font-size: 1.08rem;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(40, 86, 197, 0.12), rgba(255, 255, 255, 0.9));
   }
 
   .danger-btn,
   .secondary-btn,
   .primary-btn {
     width: 100%;
+    min-height: 50px;
   }
 
   .text-input,
   .number-input,
   .notes-input,
   select {
-    min-height: 50px;
+    min-height: 52px;
     font-size: 16px;
+    border-radius: 16px;
   }
 
   .notes-input {
@@ -711,33 +790,48 @@ th {
 
   .summary-panel {
     position: sticky;
-    bottom: 92px;
-    grid-template-columns: 1fr;
-    gap: 8px;
-    margin-top: 16px;
+    bottom: calc(86px + env(safe-area-inset-bottom, 0px));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 18px;
+    padding: 10px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.76);
+    border: 1px solid rgba(24, 34, 34, 0.06);
+    box-shadow: 0 18px 32px rgba(20, 32, 32, 0.12);
+    backdrop-filter: blur(20px);
     z-index: 20;
   }
 
   .summary-card {
-    padding: 14px 16px;
+    min-height: 112px;
+    padding: 14px 12px;
     border-radius: 20px;
-    grid-template-columns: 1fr auto;
-    align-items: center;
-    gap: 8px 12px;
-    backdrop-filter: blur(16px);
+    grid-template-columns: 1fr;
+    align-content: space-between;
+    gap: 10px;
   }
 
   .summary-card span {
     font-size: 0.84rem;
+    line-height: 1.25;
   }
 
   .summary-card strong {
-    font-size: 1.35rem;
-    text-align: end;
+    font-size: 1.22rem;
+    text-align: start;
   }
 
   .floating-add-btn {
     display: inline-flex;
+    right: 14px;
+    left: 14px;
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    justify-content: center;
+    min-height: 62px;
+    padding: 0 20px;
+    border-radius: 22px;
+    box-shadow: 0 20px 38px rgba(11, 143, 120, 0.34);
   }
 
   .toolbar .primary-btn {
@@ -745,12 +839,8 @@ th {
   }
 
   body[dir="rtl"] .floating-add-btn {
-    right: auto;
-    left: 22px;
-  }
-
-  body[dir="rtl"] .summary-card strong {
-    text-align: start;
+    right: 14px;
+    left: 14px;
   }
 }
 
@@ -763,6 +853,12 @@ th {
     padding: 12px;
   }
 
+  tr::before {
+    top: 10px;
+    right: 10px;
+    min-width: 38px;
+  }
+
   .language-switcher {
     flex-direction: column;
     align-items: stretch;
@@ -771,7 +867,7 @@ th {
   .floating-add-btn {
     right: 12px;
     left: 12px;
-    bottom: 14px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
     justify-content: center;
   }
 
@@ -781,11 +877,21 @@ th {
   }
 
   .summary-panel {
-    bottom: 86px;
+    bottom: calc(82px + env(safe-area-inset-bottom, 0px));
+    grid-template-columns: 1fr;
   }
 
   .export-actions {
     grid-template-columns: 1fr;
+  }
+
+  #saveDataBtn {
+    position: sticky;
+    top: 10px;
+    z-index: 3;
+    min-height: 60px;
+    font-size: 1.02rem;
+    box-shadow: 0 20px 34px rgba(14, 143, 116, 0.28);
   }
 }
 
@@ -816,3 +922,5 @@ th {
     background: white !important;
   }
 }
+
+

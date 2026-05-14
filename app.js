@@ -26,6 +26,8 @@ const translations = {
     exportPage: "Exporter page",
     exportJson: "Exporter JSON",
     exportCsv: "Exporter CSV",
+    saveData: "Sauvegarder les donnees",
+    saveDataDone: "Donnees sauvegardees manuellement.",
     exportReady: "Export pret.",
     autosaveReady: "Sauvegarde automatique active.",
     autosaveSaved: "Modifications enregistrees automatiquement.",
@@ -77,6 +79,8 @@ const translations = {
     exportPage: "تصدير الصفحة",
     exportJson: "تصدير JSON",
     exportCsv: "تصدير CSV",
+    saveData: "حفظ البيانات",
+    saveDataDone: "تم حفظ البيانات يدويا.",
     exportReady: "التصدير جاهز.",
     autosaveReady: "الحفظ التلقائي مفعل.",
     autosaveSaved: "تم حفظ التعديلات تلقائيا.",
@@ -128,6 +132,8 @@ const translations = {
     exportPage: "Export page",
     exportJson: "Export JSON",
     exportCsv: "Export CSV",
+    saveData: "Save data",
+    saveDataDone: "Data saved manually.",
     exportReady: "Export ready.",
     autosaveReady: "Auto-save is active.",
     autosaveSaved: "Changes saved automatically.",
@@ -166,6 +172,7 @@ const floatingAddBtn = document.getElementById("floatingAddBtn");
 const languageSelect = document.getElementById("languageSelect");
 const exportStatus = document.getElementById("exportStatus");
 const exportButtons = document.querySelectorAll(".export-btn");
+const saveDataBtn = document.getElementById("saveDataBtn");
 const clearSavedDataBtn = document.getElementById("clearSavedDataBtn");
 const autosaveMeta = document.getElementById("autosaveMeta");
 const STORAGE_KEY = "product-tracker-autosave-v1";
@@ -886,6 +893,10 @@ exportButtons.forEach((button) => {
   button.addEventListener("click", () => {
     handleExport(button.dataset.export);
   });
+});
+saveDataBtn.addEventListener("click", () => {
+  saveToStorage(false);
+  setExportStatus("saveDataDone");
 });
 clearSavedDataBtn.addEventListener("click", () => {
   localStorage.removeItem(STORAGE_KEY);
