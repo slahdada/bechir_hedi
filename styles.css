@@ -737,6 +737,16 @@ th {
   .photo-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .photo-actions .secondary-btn {
+    width: 100%;
+    min-width: 0;
+    padding-inline: 12px;
+    text-align: center;
+    justify-content: center;
   }
 
   .caption-cell {
@@ -878,7 +888,23 @@ th {
 
   .summary-panel {
     bottom: calc(82px + env(safe-area-inset-bottom, 0px));
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .summary-card {
+    min-height: 96px;
+    padding: 12px 10px;
+    border-radius: 18px;
+  }
+
+  .summary-card span {
+    font-size: 0.78rem;
+  }
+
+  .summary-card strong {
+    font-size: 1.05rem;
   }
 
   .export-actions {
